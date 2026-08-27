@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SHE Certificate Verification</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#132038;
+    --brown:#3c2a1c;
+    --gold:#c39a4b;
+    --gold-light:#e6cd8e;
+    --cream:#faf5e9;
+    --cream-deep:#f2e8d3;
+    --ink:#221a12;
+    --seal:#a3352a;
+    --verified:#2f6f4e;
+    --line:#e3d6b8;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(1200px 600px at 50% -10%, #fffaf0 0%, var(--cream) 55%, var(--cream-deep) 100%);
+    min-height:100vh;
+    font-family:'Inter',sans-serif;
+    color:var(--ink);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:56px 20px 40px;
+  }
+  .eyebrow{
+    font-family:'Inter',sans-serif;
+    font-weight:700;
+    font-size:12px;
+    letter-spacing:.22em;
+    color:var(--brown);
+    text-transform:uppercase;
+    opacity:.75;
+    margin-bottom:10px;
+  }
+  h1{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-style:italic;
+    font-size:clamp(28px,5vw,40px);
+    color:var(--navy);
+    margin:0 0 6px;
+    text-align:center;
+    letter-spacing:-.01em;
+  }
+  .sub{
+    font-size:14.5px;
+    color:#6b5d47;
+    text-align:center;
+    max-width:420px;
+    line-height:1.5;
+    margin-bottom:34px;
+  }
+  .panel{
+    width:100%;
+    max-width:460px;
+    background:#fffdf9;
+    border:1px solid var(--line);
+    border-radius:14px;
+    box-shadow:0 1px 2px rgba(60,42,28,.04), 0 12px 32px -16px rgba(60,42,28,.18);
+    padding:22px;
+  }
+  form{display:flex; gap:8px;}
+  input[type=text]{
+    flex:1;
+    font-family:'Inter',sans-serif;
+    font-size:15px;
+    padding:12px 14px;
+    border-radius:9px;
+    border:1.5px solid var(--line);
+    background:var(--cream);
+    color:var(--ink);
+    letter-spacing:.02em;
+    outline:none;
+    transition:border-color .15s ease;
+  }
+  input[type=text]::placeholder{color:#a8987a;}
+  input[type=text]:focus{border-color:var(--gold);}
+  button{
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:14.5px;
+    padding:12px 18px;
+    border-radius:9px;
+    border:none;
+    background:var(--navy);
+    color:#fff;
+    cursor:pointer;
+    transition:transform .12s ease, background .15s ease;
+  }
+  button:hover{background:#1c2e50;}
+  button:active{transform:scale(.97);}
+  button:focus-visible, input:focus-visible{outline:2px solid var(--gold); outline-offset:2px;}
+
+  #result{margin-top:22px;}
+  .hint{font-size:12.5px; color:#a8987a; margin-top:10px; text-align:center;}
+
+  .card{
+    border-radius:12px;
+    padding:22px 20px 20px;
+    border:1px solid var(--line);
+    animation:rise .35s ease both;
+  }
+  @keyframes rise{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+  @media (prefers-reduced-motion: reduce){
+    .card, .seal{animation:none !important;}
+  }
+
+  .card.valid{background:linear-gradient(180deg,#fbfdf9,#f4f9f2); border-color:#cfe3d5;}
+  .card.invalid{background:linear-gradient(180deg,#fdfaf8,#faf1ee); border-color:#e9d3cd;}
+
+  .status-row{display:flex; align-items:center; gap:14px; margin-bottom:16px;}
+
+  .seal{
+    width:46px; height:46px; flex:none; position:relative;
+    animation:stamp .4s cubic-bezier(.2,1.6,.4,1) both;
+  }
+  @keyframes stamp{from{transform:scale(1.7) rotate(-14deg); opacity:0;} to{transform:scale(1) rotate(-8deg); opacity:1;}}
+  .seal svg{width:100%; height:100%;}
+
+  .status-text .label{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:19px;
+  }
+  .valid .status-text .label{color:var(--verified);}
+  .invalid .status-text .label{color:var(--seal);}
+  .status-text .desc{font-size:13px; color:#7a6c55; margin-top:2px;}
+
+  dl{margin:0; display:grid; grid-template-columns:auto 1fr; gap:9px 14px; font-size:14px;}
+  dt{color:#8a7c62; font-weight:500;}
+  dd{margin:0; color:var(--ink); font-weight:600; text-align:right;}
+  .workshop-row dd{text-align:right; font-weight:600; line-height:1.35;}
+
+  hr.sep{border:none; border-top:1px dashed var(--line); margin:16px 0;}
+
+  footer{
+    margin-top:40px;
+    font-size:12px;
+    color:#a8987a;
+    text-align:center;
+    letter-spacing:.02em;
+  }
+  footer b{color:#6b5d47;}
+</style>
+</head>
+<body>
+
+  <div class="eyebrow">Success Health &amp; Education</div>
+  <h1>Certificate Verification</h1>
+  <p class="sub">Enter the certificate number printed on a SHE CPD certificate, or scan its QR code, to confirm it's genuine.</p>
+
+  <div class="panel">
+    <form id="verifyForm">
+      <input type="text" id="certInput" placeholder="e.g. 0802003" autocomplete="off" inputmode="numeric">
+      <button type="submit">Verify</button>
+    </form>
+    <div id="result"></div>
+  </div>
+
+  <footer>Issued certificates are checked against SHE's official records.<br><b>Success Health and Education</b> &middot; Kano State, Nigeria</footer>
+
+<script>
+const CERTS = [{"cert":"0802003","name":"EKELE Endurance PT","license":"MBY/'18/4540","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802004","name":"Temiloluwa Ruth Adeniran","license":"6937","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802005","name":"Nafisa Audu Grema","license":"MKS/20/5392","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802006","name":"Nnonyelu Clever Chukwuemeka","license":"MGT/'22/6171","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802007","name":"Okakpu Chinwendu Cynthia","license":"MDW/17/4360","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802008","name":"Dauda Saheed Olajide","license":"MBY/'18/4538","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802009","name":"Julius Akinwale Akinfenwa","license":"MCX/'05/1344","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802010","name":"Faleye Abayomi Victor","license":"MAZ/'10/2098","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802011","name":"Shukurah Temitope Oriaje","license":"MBY/'14/3568","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802012","name":"Aishatu Umar","license":"MFU/11/2381","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802013","name":"Lawan Muhammed Kolo","license":"3043","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802014","name":"Idowu Samuel Temitope","license":"3100","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802015","name":"Bakare Hammed O.","license":"MBY/'14/3192","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802016","name":"Farida Ibrahim","license":"MKS/18/4602","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802017","name":"Jennifer. C. Eze","license":"1322","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802018","name":"MR Okorn Ikora Orim, PT","license":"MDW/'21/5704","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802019","name":"Vivian Ogechukwu Ogbu","license":"MLB/23/6422","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802020","name":"Ransome Udi.","license":"MCX/92/0226","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802021","name":"Tony Mathias","license":"MAZ/'07/1565","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802022","name":"Aisha Salako","license":null,"workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802023","name":"Trenchard Oghenerukevwe AGBAJE","license":"MBY/'15/3611","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802024","name":"Nwankwo Chukwuma Eric","license":"MDW/'17/4356","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802025","name":"Abdul Olorunfemi Adebola","license":"MBY/'14/3188","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802026","name":"Ezema Georginia Nnenna","license":"MDW/'16/3741","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802027","name":"Precious Ogualaji","license":"MDW/'18/4732","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802028","name":"Ezeador Favour Akachukwu","license":"MGT/'18/4625","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802029","name":"Uluocha Ifeanyi Abraham","license":"MDW/'102260","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802030","name":"Ahmad Muhammad Dankano","license":"MEV/11/2207","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802031","name":"Eneh Loveth Ezinne","license":"MDW/'21/5863","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802032","name":"Aisha Umar Bellp","license":"MKS/18/4682","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802033","name":"Oko Emmanuel ogbonnia","license":"MDW/'17/4361","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802034","name":"Joshua Ikechukwu ANYANWOKE","license":"MDW/'23/6953","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802035","name":"Nengou Davis Brown","license":"MBY/23/6781","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802036","name":"Ruqayyah Ibrahim Oladepo","license":"MBY/'20/5323","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802037","name":"Yesminat Yusuf","license":"MEV/21'/5533","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802038","name":"Ibitoye-Orangun Yetunde Adebukola","license":"MCX/01/2117","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802039","name":"Adesina kazeem Akindele","license":"MBY/91/0281","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802040","name":"Abubakar garba","license":"Mks/20/5291","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802041","name":"Ezemobi Raphael Iheanacho","license":"2050","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802042","name":"Chidinma Favour Mbaike","license":"MAZ'13'3117","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802043","name":"NURUDEEN, Opeyemi Ifeoluwa","license":"MCX/'16/3668","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802044","name":"AKANDE Victor, A","license":"709","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802045","name":"Ismaila Abdullateef","license":"Mev/12/0273","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802046","name":"Ajayi Taiwo Ezekiel","license":"MCX/'18/4591","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802047","name":"Okeye Bright Ebitimi","license":"MGT/'23/6620","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802048","name":"Fadeyibi Olatunbosun Adenipekun","license":"MBY/'13/3193","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802049","name":"Momohjimoh Onimisi Abdullahi","license":"MEV/'16/3833","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802050","name":"Daberechi Chidera Diana","license":"MDW/'16/4085","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802051","name":"Mubarak Aminu Ibrahim","license":"Mev/15/3853","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802052","name":"OCHIAKA Chidi Chioma","license":"MDW/09/1933","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802053","name":"Lanre-thomas Adebayo Ayoola","license":"MCX/'16/3685","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802054","name":"Osindero Boroji Atinuke","license":"MKS/'98/1578","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802055","name":"Ibrahim Sani","license":"MEV'21/5575","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802056","name":"Mannir Usman","license":"MEV/14/3380","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802057","name":"Adebisi Gbolagade Ladapo","license":"MAZ/'90/0321","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802058","name":"Godwin Okolo","license":"MFU/14/3254","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802059","name":"Aniji Ejike Kenneth","license":"MGT/23/6619","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802060","name":"Anajuba Uchechukwu Chioma","license":"MDW/'15/3506","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802061","name":"Otaiku Afusat Oluwayemis","license":"MAZ/'13/2817","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802062","name":"Muhammad Salisu Adamu","license":"MEV/'15/3420","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802063","name":"DR Oyelese Olubukola Babatunde","license":"MCX/'90/0071","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802064","name":"Efobi Orufa Blessing Ngozi","license":"1363","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802065","name":"Alegbeleye Mariam Ibironke","license":"MCX/'19/4744","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802066","name":"Ekene Ebenighe","license":"2651","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802067","name":"Chinenye Cordelia Chiegboka","license":"1827","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802068","name":"Shehu Auwalu","license":"MEV/18/PI14468","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802069","name":"Nnaji Amuche Charity","license":"MDW/'15/3508","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802070","name":"Umahi Ezinne Okorie","license":"MDW/15/3459","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802071","name":"Kamal AbdulHamid Haruna","license":"MEV/'15/3390","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802072","name":"Babawemimo Felix Olubunmi","license":"MAZ/'01/1047","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"},{"cert":"0802073","name":"Alagba Pamela Obiageli","license":"MGT/21/5684","workshop":"PAIN, FUNCTION & QoL ASSESSMENT FOR NON-SPECIFIC BACK PAIN","date":"22nd Aug, 2026","cpd":5,"facilitator":"Prof. Bashir Bello"}];
+
+const byId = {};
+CERTS.forEach(c => byId[c.cert.trim()] = c);
+
+const form = document.getElementById('verifyForm');
+const input = document.getElementById('certInput');
+const result = document.getElementById('result');
+
+function normalize(v){
+  return (v || '').toString().trim().toUpperCase().replace(/^SHE-?/,'').replace(/\s+/g,'');
+}
+
+function validIcon(){
+  return `<svg viewBox="0 0 100 100" class="seal">
+    <polygon points="50,2 58,15 72,9 74,24 89,26 84,40 96,49 84,58 89,72 74,74 72,89 58,83 50,96 42,83 28,89 26,74 11,72 16,58 4,49 16,40 11,26 26,24 28,9 42,15"
+      fill="#2f6f4e"/>
+    <path d="M32 51 L44 63 L69 37" stroke="#fff" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>`;
+}
+function invalidIcon(){
+  return `<svg viewBox="0 0 100 100" class="seal">
+    <polygon points="50,2 58,15 72,9 74,24 89,26 84,40 96,49 84,58 89,72 74,74 72,89 58,83 50,96 42,83 28,89 26,74 11,72 16,58 4,49 16,40 11,26 26,24 28,9 42,15"
+      fill="#a3352a"/>
+    <path d="M37 37 L63 63 M63 37 L37 63" stroke="#fff" stroke-width="7" fill="none" stroke-linecap="round"/>
+  </svg>`;
+}
+
+function render(certRaw){
+  const key = normalize(certRaw);
+  if(!key){ result.innerHTML = ''; return; }
+  const rec = CERTS.find(c => normalize(c.cert) === key);
+
+  if(rec){
+    result.innerHTML = `
+      <div class="card valid">
+        <div class="status-row">
+          ${validIcon()}
+          <div class="status-text">
+            <div class="label">Certificate verified</div>
+            <div class="desc">This is a genuine SHE CPD certificate.</div>
+          </div>
+        </div>
+        <dl>
+          <dt>Certificate No.</dt><dd>${escapeHtml(rec.cert)}</dd>
+          <dt>Name</dt><dd>${escapeHtml(rec.name)}</dd>
+          ${rec.license ? `<dt>License No.</dt><dd>${escapeHtml(rec.license)}</dd>` : ''}
+          <dt>CPD Points</dt><dd>${rec.cpd}</dd>
+          <dt>Date</dt><dd>${escapeHtml(rec.date)}</dd>
+        </dl>
+        <hr class="sep">
+        <dl class="workshop-row">
+          <dt>Workshop</dt><dd>${escapeHtml(rec.workshop)}</dd>
+        </dl>
+        <dl style="margin-top:9px;">
+          <dt>Facilitator</dt><dd>${escapeHtml(rec.facilitator)}</dd>
+        </dl>
+      </div>`;
+  } else {
+    result.innerHTML = `
+      <div class="card invalid">
+        <div class="status-row">
+          ${invalidIcon()}
+          <div class="status-text">
+            <div class="label">Not found</div>
+            <div class="desc">No certificate matches "${escapeHtml(certRaw)}".</div>
+          </div>
+        </div>
+        <p class="hint" style="margin:0; text-align:left;">Double-check the number on the certificate, or contact Success Health and Education if you believe this is an error.</p>
+      </div>`;
+  }
+}
+
+function escapeHtml(s){
+  return (s ?? '').toString().replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+form.addEventListener('submit', e => {
+  e.preventDefault();
+  render(input.value);
+});
+
+// Auto-verify if a cert number is passed via URL, e.g. ?cert=0802003
+const params = new URLSearchParams(window.location.search);
+const fromUrl = params.get('cert');
+if(fromUrl){
+  input.value = fromUrl;
+  render(fromUrl);
+}
+</script>
+</body>
+</html>
